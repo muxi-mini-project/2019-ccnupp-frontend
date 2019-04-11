@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text,Image,Textarea,Button } from '@tarojs/components'
+import { View, Text,Image,Input,Button,OpenData } from '@tarojs/components'
 import './detail.less'
 import '../../images/timeicon.png'
 import '../../images/placeicon.png' 
@@ -119,22 +119,25 @@ export default class Index extends Component {
         <View className='comments'>
         {/* <Textarea placeholder-class='input_null' maxlength='-1' show-confirm-bar={false} cursor-spacing='15' auto-height placeholder='请输入回复' name='comment'></Textarea>
         <Button form-type='submit' className='submit'>提交</Button>  */}
-        <View className="talk" bindtap={this.bindReply}></View> 
-        <Textarea class='text' 
-          placeholderClass='input_null'
-          fixed='true'
-          maxlength='-1' 
-          show-confirm-bar={false} 
-          cursorSpacing
-          auto-autoHeight
-          placeholder='问问更多细节吧~'
-          onClick={this.bindReply}
-        ></Textarea> 
-        <View class='release' hidden={!this.state.releaseFocus}>  
-        <View className='submit'>发送</View> 
- </View> 
+        <View className='talk'>
+        <View className='headsculpture'>
+        <OpenData type='userAvatarUrl'></OpenData>
         </View>
+        <Input className='text' 
+          type='text'
+          placeholderClass='input_null'
+          placeholder='问问更多细节吧~'
+          focus
+          maxLength='-1' 
+          showConfirmBar={false} 
+          cursorSpacing={0}
+        ></Input> 
+        <View class='release'> 
+        <View className='submit' onClick={this.submitForm.bind(this)}>发送</View> 
+        </View> 
       </View> 
+    </View>
+  </View> 
     )
   }
 }

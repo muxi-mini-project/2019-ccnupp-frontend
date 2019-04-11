@@ -9,7 +9,7 @@ export default class mypage extends Component{
     constructor(props){
     super(props)
     this.state = {
-      orderList: [1],
+      orderList: [ ],
       pageNum: 0,
       pageMax: 0,
       hasNext:true,
@@ -43,8 +43,8 @@ export default class mypage extends Component{
       this.setState({
         orderList: data.orderList
       })
+      console.log(data.orderList);
     })
-    console.log(this.state.orderList);
   }
 
   componentDidMount () { }
@@ -59,21 +59,12 @@ export default class mypage extends Component{
     return (
       <View>
         <headerTab navList={['发起','参与','讨论']} />  
+        <View className='height'>
         <View className='tab-content'>
-        {this.state.orderList}
-        {/* {this.state.orderList.map(() => (
-            <SmallTab key='2' />
-        ))} */}
-        </View>
-        <View className='tab-content'>
-        {this.state.orderList.map(() => (
-            <SmallTab key='2' orderList={this.state.orderList} />
+        {this.state.orderList.map((obj,index) => (
+            <SmallTab key='2' orderList={this.state.orderList[index]} />
         ))}
         </View>
-        <View className='tab-content'>
-        {this.state.orderList.map(() => (
-            <SmallTab />
-        ))}
         </View>
       </View>
     )
