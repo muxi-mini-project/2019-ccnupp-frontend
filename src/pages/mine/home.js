@@ -10,7 +10,8 @@ export default class mypage extends Component{
     super(props)
     this.state = {
       orderList: [ ],
-      pageNum: 0,
+      pageNum: 1,
+      userID: 2,
       pageMax: 0,
       hasNext:true,
       ordersnum:0,
@@ -22,10 +23,18 @@ export default class mypage extends Component{
   changPage(e){
     var id = e.currentTarget.dataset.id
     Taro.navigateTo({
-      url: '../add/detail?id=' + `${id}`
+      url: `../add/detail?id=${id}`
   })
 }
-
+switchNav (e){
+  var cur = e.target.dataset.index;
+  if(this.state.currentTab == cur){return false;}
+  else{
+    this.setState({
+      currentTab:cur
+    })
+  }
+}
   // getpindanList (ordercarID, page) {
   //   Fetch(`/order/car/`+ `${ordercarID}/`+`${page}`).then(data => {
   //     this.setState({
@@ -37,6 +46,28 @@ export default class mypage extends Component{
   //     })
   //   });
   // }
+  getIndex(index){
+    if(index === 1){
+      Fetch(`/order/post/list/?userID=${this.state.userID}&page=${this.state.pageNum}`).then(data => {
+        this.setState({
+          orderList: data.orderList
+        })
+        console.log(data.orderList);
+      })
+    }else if(index === 2){
+    Fetch(`/order/pick/list/?userID=${this.state.userID}&page=${this.state.pageNum}`).then(data => {
+      this.setState({
+        orderList: data.orderList
+      })
+    })
+  }else{
+    Fetch(`/order/comment/list/?userID=${this.state.userID}&page=${this.state.pageNum}`).then(data => {
+      this.setState({
+        orderList: data.orderList
+      })
+    })
+  }
+  }
 
   componentWillMount() {
     Fetch("/order/buy/list/?kind=1").then(data => {
@@ -46,6 +77,7 @@ export default class mypage extends Component{
       console.log(data.orderList);
     })
   }
+
 
   componentDidMount () { }
   
@@ -58,7 +90,7 @@ export default class mypage extends Component{
   render () {
     return (
       <View>
-        <headerTab navList={['发起','参与','讨论']} />  
+        <headerTab navList={[{key:1,content:'发起'},{key:2,content:'参与'},{key:3,content:'我的'}]} onGetIndex={this.getIndex.bind(this)} />  
         <View className='height'>
         <View className='tab-content'>
         {this.state.orderList.map((obj,index) => (

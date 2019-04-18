@@ -51,12 +51,12 @@ export default class SmallTab extends Component {
         <View className='place'>地点：{list.location}</View>
         </View>
         <View className='button-box'>
-        <Button className='btn'>
+        <View className='btn' 'red'>
         <Text>编辑</Text>
-        </Button>
-        <Button className='btn'>
+        </View>
+        <View className='btn'>
         <Text>再拼一单</Text>
-        </Button>
+        </View>
         </View>
       </View>
     )

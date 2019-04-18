@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Image,Input,Button,OpenData } from '@tarojs/components'
 import './detail.less'
+import Fetch from "../../common/request";
 import '../../images/timeicon.png'
 import '../../images/placeicon.png' 
 
@@ -9,8 +10,9 @@ export default class Index extends Component {
     super(props)
     this.state = {
       releaseFocus: false,
-      orderid:0,
-      // kind:0,
+      orderid:0,  
+      info:{
+      kind:0,
       location: "8号楼",
       timeBuy: "19：00",
       numNeed: 4,
@@ -18,8 +20,9 @@ export default class Index extends Component {
       picture: "../../images/uiplus.png",
       content: "我是内容",
       heading: "我是标题",
-      // full: true,
-      // usersid:[],
+      full: true,
+      },
+      userPicture:[],
       comments:[],
       // userheadpic:"1"
       }
@@ -83,6 +86,15 @@ export default class Index extends Component {
     this.setState({
       orderid:id,
     })
+    Fetch(`/order/buy/?orderID=${id}`
+    ).then(data =>{
+      console.log(data);
+      this.setState({
+      info:data.info,
+      userPicture:data.userPicture,
+      comments:data.comments,
+      })
+    });
   }
 
   componentDidMount () { }
@@ -98,27 +110,24 @@ export default class Index extends Component {
       <View className='body'>
       <View className='content'>
       <View className='usrmasg'>
-        <Image class='headsculpture' src='../../images/uiplus.png'> </Image>
+        <Image class='headsculpture' src={this.state.info.userPicture}> </Image>
         <View className='nickname'>我是名字</View>
-        {/* {Taro.getUserInfo.nickName} */}
         </View>
-        <View className='header'>{this.state.heading}</View>
-        <View className='cnt'>{this.state.content}</View>
+        <View className='header'>{this.state.info.heading}</View>
+        <View className='cnt'>{this.state.info.content}</View>
         <View className='time'>
           <Image className='timeimg' src='../../images/timeicon.png' ></Image>
-          <View className='timetxt'>下单时间：{this.state.timeBuy}</View>
+          <View className='timetxt'>下单时间：{this.state.info.timeBuy}</View>
         </View>
         <View className='place'>
           <Image className='placeimg' src='../../images/placeicon.png'></Image>
-          <View className='placetxt'>拼单地点：{this.state.location}</View>
+          <View className='placetxt'>拼单地点：{this.state.info.location}</View>
         </View>
-        <View className='num'>已拼{this.state.numExist}/{this.state.numNeed}</View>
-        <Image className='content-imge' src={this.state.picture}></Image>
+        <View className='num'>已拼{this.state.info.numExist}/{this.state.info.numNeed}</View>
+        <Image className='content-imge' src={this.state.info.picture}></Image>
         </View>
         <View className='remarknum'>{this.state.comments.length}条评论回复</View>
         <View className='comments'>
-        {/* <Textarea placeholder-class='input_null' maxlength='-1' show-confirm-bar={false} cursor-spacing='15' auto-height placeholder='请输入回复' name='comment'></Textarea>
-        <Button form-type='submit' className='submit'>提交</Button>  */}
         <View className='talk'>
         <View className='headsculpture'>
         <OpenData type='userAvatarUrl'></OpenData>

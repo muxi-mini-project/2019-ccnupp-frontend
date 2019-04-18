@@ -6,8 +6,8 @@ import Taro from "@tarojs/taro";
 // Fetch(url, data).then((res) => { console.log(res)})
 const preHttp = "https://pinpin.muxixyz.com/api/v1";
 const Fetch = (url, data = {}, method = "GET") => {
-  const header = { "content-type": "application/json" };
   const token = Taro.getStorageSync("token");
+  const header = { "content-type": "application/json","token":"eyJhbGciOiJIUzUxMiIsImlhdCI6MTU1NTU5MDM3MiwiZXhwIjozNjE1NTU1OTAzNzJ9.eyJvcGVuaWQiOjF9.D5sp3Fa498ajEBjsmIIXKdusnQuUF_b_8Ew7Xi8qSE8pnQ1GYLpWDcaklpe7TaeYGNXtnmY7Gm4Kx9UBi5q03g"};
   if (token) {
     header.Authorization = `Bearer ${token}`;
   }

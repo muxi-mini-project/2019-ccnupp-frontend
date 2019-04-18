@@ -1,3 +1,4 @@
+/* eslint-disable taro/duplicate-name-of-state-and-props */
 import Taro, { Component } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
 import './header-tab.less'
@@ -10,29 +11,28 @@ export default class headerTab extends Component {
   }
   constructor(props){
     super(props)
-    this.state = { 
-      //导航索引
-      currentTab: 0,
+    this.state = {
+      currentTab:1
       }
     }
 
-    //点击首页导航
-    switchNav (e){
-      var cur = e.target.dataset.index;
-      if(this.state.currentTab == cur){return false;}
+    switchNav (value,e){
+      var cur = e.target.dataset.current;
+      if(this.state.currentTab === cur){return false;}
       else{
         this.setState({
           currentTab:cur
         })
       }
+      this.props.onGetIndex(value);
     }
 
   render () {
     return (
       <View className='swiper-tab'>
-        {this.props.navList.map((nev,index) => (
-          <View className={this.state.currentTab===index?'active':'normal'} data-index={index}  onClick={this.switchNav.bind(this)}>{nev}</View>
-        ))}
+        {this.props.navList.map((nav) =>
+          <View className={this.state.currentTab===nav.key?'active':'normal'} data-current={nav.key} onClick={this.switchNav.bind(this,nav.key)} key='0'>{nav.content}</View>
+        )}
     </View>
     )
   }
