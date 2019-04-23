@@ -4,6 +4,8 @@ import './home.less'
 import Fetch from "../../common/request";
 import SmallTab  from '../../componments/smallTab/small-tab'
 import headerTab from '../../componments/headerTab/header-tab'
+import NopicTab from '../../componments/noPicTab/nopic-tab'
+import CarTab from '../../componments/carTab/car-tab'
 
 export default class mypage extends Component{
     constructor(props){
@@ -94,7 +96,7 @@ switchNav (e){
         <View className='height'>
         <View className='tab-content'>
         {this.state.orderList.map((obj,index) => (
-            <SmallTab key='2' orderList={this.state.orderList[index]} />
+            <NopicTab key='2' orderList={this.state.orderList[index]} />
         ))}
         </View>
         </View>

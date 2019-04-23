@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Button,Image } from '@tarojs/components'
-import './small-tab.less'
+import './nopic-tab.less'
 
-export default class SmallTab extends Component {
+export default class NopicTab extends Component {
 
   constructor(props){
     super(props)
@@ -40,15 +40,13 @@ export default class SmallTab extends Component {
       ></Image>
         ))}
 
-      <View className='numberOfpinpin' onClick={this.changPage.bind(this)} data-id={list.orderbuyID} >已拼{list.numExist}/{list.numNeed} 
+<View className='numberOfpinpin' onClick={this.changPage.bind(this)} data-id={1} >已拼{list.numExist}/{list.numNeed} 
       <View className='sign'> > </View>
       </View>
       </View>
-      <Image className='description-picture'
-        src={list.picture}
-      ></Image>
         <View className='description'>
         <View className='title'>{list.heading}</View>
+        <View className='cont'>{list.content}</View>
         <View className='time'>下单时间：{list.timeBuy}</View>
         <View className='place'>地点：{list.location}</View>
         </View>

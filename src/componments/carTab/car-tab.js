@@ -1,8 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Button,Image } from '@tarojs/components'
-import './small-tab.less'
+import './car-tab.less'
+import '../../images/time.png'
+import '../../images/end.png'
+import '../../images/start.png'
 
-export default class SmallTab extends Component {
+export default class CarTab extends Component {
 
   constructor(props){
     super(props)
@@ -40,27 +43,29 @@ export default class SmallTab extends Component {
       ></Image>
         ))}
 
-      <View className='numberOfpinpin' onClick={this.changPage.bind(this)} data-id={list.orderbuyID} >已拼{list.numExist}/{list.numNeed} 
-      <View className='sign'> > </View>
+      <View className='numberOfpinpin'>已拼{list.numExist}/{list.numNeed} </View>
       </View>
-      </View>
-      <Image className='description-picture'
-        src={list.picture}
-      ></Image>
         <View className='description'>
-        <View className='title'>{list.heading}</View>
-        <View className='time'>下单时间：{list.timeBuy}</View>
-        <View className='place'>地点：{list.location}</View>
+        <View className='list'>
+        <Image className='img' src='../../images/start.png'></Image>
+        <View className='word'>{list.placeA}</View>
         </View>
-        <View className='button-box'>
-        <View className='btn red'>
-        <Text>编辑</Text>
+        <View className='list'>
+        <Image className='img' src='../../images/end.png'></Image>
+        <View className='word'>{list.placeB}</View>
         </View>
-        <View className='btn black'>
-        <Text>再拼一单</Text>
+        <View className='list'>
+        <Image className='img' src='../../images/time.png'></Image>
+        <View className='word'>{list.timeGo}</View>
         </View>
+        </View>
+        <View className='bottom'>
+        <View className='remark'>备注：{list.heading}</View>
+        <View className='btn'>
+        <Text>确认拼单</Text>
         </View>
       </View>
+    </View>
     )
   }
 }

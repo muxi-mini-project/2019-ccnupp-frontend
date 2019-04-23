@@ -19,6 +19,11 @@ const Fetch = (url, data = {}, method = "GET") => {
   }).then(res => {
     if (res.statusCode === 200) {
       if (res.data.data) {
+        Taro.showToast({
+          title: '成功',
+          icon: 'success',
+          duration: 2000
+        })
         return res.data.data;
       } else {
         return res.data.code; // 业务逻辑错误，返回业务错误码
@@ -28,7 +33,7 @@ const Fetch = (url, data = {}, method = "GET") => {
       Taro.showToast({
         title: `服务端错误: ${res.statusCode}, ${res.data.message}`,
         icon: "none",
-        duration: 1000
+        duration: 500
       });
       throw new Error(`服务端错误: ${res.statusCode}`);
     }
