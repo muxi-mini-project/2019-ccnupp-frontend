@@ -1,11 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import './index.less'
 import Fetch from "../../common/request";
-import SmallTab  from '../../componments/smallTab/small-tab'
-import headerTab from '../../componments/headerTab/header-tab'
-import NopicTab from '../../componments/noPicTab/nopic-tab'
-import CarTab from '../../componments/carTab/car-tab'
+import Fetch1 from "../../common/request_2";
+import SmallTab  from '../../components/smallTab/small-tab'
+import headerTab from '../../components/headerTab/header-tab'
+import NopicTab from '../../components/noPicTab/nopic-tab'
+import CarTab from '../../components/carTab/car-tab'
+
 
 export default class mypage extends Component{
     constructor(props){
@@ -13,10 +15,7 @@ export default class mypage extends Component{
     this.state = {
       orderList: [ ],
       pageNum: 1,
-      pageMax: 0,
       hasNext:true,
-      ordersnum:0,
-      kind: 2,
       index: 1
       }
     }
@@ -31,9 +30,7 @@ export default class mypage extends Component{
     Fetch(`/order/car/list/?page=${page}`).then(data => {
       this.setState({
         orderList:data.orderList,
-        pageMax:data.pageMax,
         hasNext:data.hasNext,
-        ordersnum:data.ordersnum,
         pageNum:data.pageNum
       })
       console.log(data);
@@ -44,9 +41,7 @@ export default class mypage extends Component{
       console.log(data);
       this.setState({
         orderList:data.orderList,
-        pageMax:data.pageMax,
         hasNext:data.hasNext,
-        ordersnum:data.ordersnum,
         pageNum:data.pageNum
       })
     })
@@ -112,6 +107,17 @@ export default class mypage extends Component{
   }
 
   componentWillMount() {
+    Fetch1(
+      'user/info/',
+      {
+        username:Taro.getStorageSync('nickName'),
+        headPicture:Taro.getStorageSync('ava_p'),
+        tel:'',
+        qq:'',
+        wechat:''
+      },
+      "PUT"
+    )
     Fetch(`/order/buy/list/?kind=1&page=1`).then(data => {
       this.setState({
         orderList: data.orderList
@@ -119,10 +125,8 @@ export default class mypage extends Component{
     })
   }
 
-  componentDidMount () {
+  componentDidMount () {  }
 
-   }
-  
   componentWillUnmount () { }
 
   componentDidShow () { }
@@ -130,13 +134,13 @@ export default class mypage extends Component{
   componentDidHide () { }
 
   render () {
-    const dxs = this.state.index;
+    const inx = this.state.index;
     return (
       <View>
         <headerTab navList={[{key:1,content:'网购'},{key:2,content:'拼车'},{key:3,content:'会员账号'},{key:4,content:'其他'},{key:5,content:'外卖'}]} onGetIndex={this.getIndex.bind(this)} />  
         <View className='height'>
         <View className='tab-content'>
-        {dxs === 2?
+        {inx === 2?
           this.state.orderList.map((obj,index) => (
             <CarTab key='2' orderList={this.state.orderList[index]} />
         ))
