@@ -1,0 +1,49 @@
+import Taro, { Component } from '@tarojs/taro'
+import { View, Text , Input ,Textarea ,Button} from '@tarojs/components'
+import './advice.less'
+
+export default class Index extends Component {
+
+  /**
+   * 指定config的类型声明为: Taro.Config
+   *
+   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
+   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
+   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+   */
+ config = {
+    navigationBarTitleText: '意见反馈'
+  }
+
+  componentWillMount () { }
+
+  componentDidMount () { }
+
+  componentWillUnmount () { }
+
+  componentDidShow () { }
+
+  componentDidHide () { }
+  constructor(props){
+    super(props);
+  };
+  toPage() {
+    Taro.navigateBack({
+      delta:1
+    })
+}
+  render () {
+    return (
+      <View>
+      <View className='adviceBox'>
+        <View className='connection'>
+        <Text className='way'>联系方式:</Text>
+        <Input type='text' placeholder='请填写您的联系方式'></Input>
+        </View>
+        <Textarea className='text-area' placeholder='请完善您的意见，这有助于我们更好的完善华师拼拼！'></Textarea>
+      </View>
+      <Button className='footer' onClick={()=>this.toPage()}>确认发布</Button>
+      </View>
+    )
+  }
+}
