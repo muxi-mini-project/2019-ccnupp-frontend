@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View,Swiper,SwiperItem,ScrollView } from '@tarojs/components'
+import { View, } from '@tarojs/components'
 import './home.less'
 import Fetch from "../../common/request";
 import SmallTab  from '../../components/smallTab/small-tab'
@@ -15,9 +15,7 @@ export default class mypage extends Component{
       pageNum: 1,
       userID: 2,
       index: 0,
-      pageMax: 0,
       hasNext:true,
-      ordersnum:0,
       }
     }
   config = {
@@ -52,29 +50,29 @@ switchNav (e){
   //   });
   // }
   getOrderPostList(page){
-    Fetch(`/order/post/list/?userID=${this.state.userID}&page=${page}`).then(data => {
+    Fetch(`order/post/list/?userID=${this.state.userID}&page=${page}`).then(data => {
       this.setState({
-        orderList:data.orderList,
-        hasNext:data.hasNext,
-        pageNum:data.pageNum
+        orderList:data.data.orderList,
+        hasNext:data.data.hasNext,
+        pageNum:data.data.pageNum
       })
     })
   }
   getOrderPickList(page){
-    Fetch(`/order/pick/list/?userID=${this.state.userID}&page=${page}`).then(data => {
+    Fetch(`order/pick/list/?userID=${this.state.userID}&page=${page}`).then(data => {
       this.setState({
-        orderList:data.orderList,
-        hasNext:data.hasNext,
-        pageNum:data.pageNum
+        orderList:data.data.orderList,
+        hasNext:data.data.hasNext,
+        pageNum:data.data.pageNum
       })
     })
   }
   getOrderCommentList(page){
-    Fetch(`/order/comment/list/?userID=${this.state.userID}&page=${page}`).then(data => {
+    Fetch(`order/comment/list/?userID=${this.state.userID}&page=${page}`).then(data => {
       this.setState({
-        orderList:data.orderList,
-        hasNext:data.hasNext,
-        pageNum:data.pageNum
+        orderList:data.data.orderList,
+        hasNext:data.data.hasNext,
+        pageNum:data.data.pageNum
       })
     })
   }
@@ -92,12 +90,32 @@ switchNav (e){
   }
   }
     //刷新
-    onPullDownRefresh(){
-      Taro.showNavigationBarLoading();
-      this.getIndex(this.state.index);
-      Taro.hideNavigationBarLoading();
-      Taro.stopPullDownRefresh();
-  }
+  //   onPullDownRefresh(){
+  //     const{index} = this.state;
+  //     Taro.showNavigationBarLoading();    
+  //     if(index == 1){
+  //     Fetch(`order/post/list/?userID=${this.state.userID}&page=1`).then(data => {
+  //       console.log(data);
+  //       this.setState({
+  //         orderList: data.data.orderList
+  //       })
+  //     })
+  //   }else if(index == 2){
+  //     Fetch(`order/pick/list/?userID=${this.state.userID}&page=1`).then(data => {
+  //       this.setState({
+  //         orderList: data.data.orderList
+  //       })
+  //     })
+  //   }else{
+  //     Fetch(`order/comment/list/?userID=${this.state.userID}&page=1`).then(data => {
+  //       this.setState({
+  //         orderList: data.data.orderList
+  //       })
+  //     })
+  //   };
+  //     Taro.hideNavigationBarLoading();
+  //     Taro.stopPullDownRefresh();
+  // }
     //上拉加载更多
     onReachBottom(){
       var hasNext=this.state.hasNext;
@@ -106,11 +124,11 @@ switchNav (e){
         var num = this.state.pageNum;
         num = num + 1;
         if(this.state.index === 1 ){
-          Fetch(`/order/post/list/?userID=${this.state.userID}&page=${num}`).then(data => {
-            var datalist = data.orderList;
+          Fetch(`order/post/list/?userID=${this.state.userID}&page=${num}`).then(data => {
+            var datalist = data.data.orderList;
             this.setState({
-              hasNext:data.hasNext,
-              pageNum:data.pageNum
+              hasNext:data.data.hasNext,
+              pageNum:data.data.pageNum
             });
             return datalist;
         }).then(datalist =>{
@@ -120,11 +138,11 @@ switchNav (e){
           })
         })
       }else if(this.state.index === 2){
-        Fetch(`/order/pick/list/?userID=${this.state.userID}&page=${num}`).then(data => {
-          var datalist = data.orderList;
+        Fetch(`order/pick/list/?userID=${this.state.userID}&page=${num}`).then(data => {
+          var datalist = data.data.orderList;
           this.setState({
-            hasNext:data.hasNext,
-            pageNum:data.pageNum
+            hasNext:data.data.hasNext,
+            pageNum:data.data.pageNum
           });
           return datalist;
       }).then(datalist =>{
@@ -134,11 +152,11 @@ switchNav (e){
         })
       })
       }else{
-        Fetch(`/order/comment/list/?userID=${this.state.userID}&page=${num}`).then(data => {
-          var datalist = data.orderList;
+        Fetch(`order/comment/list/?userID=${this.state.userID}&page=${num}`).then(data => {
+          var datalist = data.data.orderList;
           this.setState({
-            hasNext:data.hasNext,
-            pageNum:data.pageNum
+            hasNext:data.data.hasNext,
+            pageNum:data.data.pageNum
           });
           return datalist;
       }).then(datalist =>{
@@ -152,11 +170,11 @@ switchNav (e){
   }
 
   componentWillMount() {
-    Fetch("/order/buy/list/?kind=1").then(data => {
+    Fetch(`order/post/list/?userID=${this.state.userID}&page=1`).then(data => {
       this.setState({
-        orderList: data.orderList
+        orderList: data.data.orderList
       })
-      console.log(data.orderList);
+      console.log(data.data.orderList);
     })
   }
 
@@ -170,14 +188,23 @@ switchNav (e){
   componentDidHide () { }
 
   render () {
+    const {orderList} = this.state
     return (
       <View>
         <headerTab navList={[{key:1,content:'发起'},{key:2,content:'参与'},{key:3,content:'我的'}]} onGetIndex={this.getIndex.bind(this)} />  
         <View className='height'>
         <View className='tab-content'>
-        {this.state.orderList.map((obj,index) => (
-            <NopicTab key='2' orderList={this.state.orderList[index]} />
-        ))}
+        {
+        orderList.map((obj) => (
+          obj.kind === 2?
+          <CarTab key='2' orderList={obj} />
+          :
+          obj.picture?
+            <SmallTab key='2' orderList={obj} />
+            :
+            <NopicTab key='2' orderList={obj} />
+        ))
+        }
         </View>
         </View>
       </View>

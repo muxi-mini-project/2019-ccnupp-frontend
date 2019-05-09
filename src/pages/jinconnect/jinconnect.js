@@ -1,11 +1,12 @@
 import Taro, { Component} from '@tarojs/taro'
 import { View, Button ,Input ,Image} from '@tarojs/components'
+import {isNull} from 'util'
 import pho from '../../img/qq.png'
 import phoone from '../../img/wechat.png'
 import photwo from '../../img/c-phone.png'
 
 import './jinconnect.less'
-import Fetch from '../../common/request_1';
+import Fetch from '../../common/request';
 
 export default class  Jconnection extends Component {
 
@@ -85,24 +86,56 @@ export default class  Jconnection extends Component {
           url:'/pages/connectiontwo/connectiontwo',
       })
   }
-  setconnection1(){
+  
+setconnection1(){
+    if((!isNull(this.state.tel))&&(this.state.tel!='')){
     Taro.setStorageSync('tel',this.state.tel)
+    Taro.setStorageSync('con','已选电话')
     Taro.navigateBack({
       url:'pages/index/login/login'
     })
+   }
+   else{
+    Taro.showToast({
+      title: "请编辑您的联系方式",
+      icon: "none",
+      duration: 1000
+    })
+   }
   }
   setconnection2(){
+    if((!isNull(this.state.tel))&&(this.state.tel!='')){
     Taro.setStorageSync('wechat',this.state.wechat)
+    Taro.setStorageSync('con','已选微信')
     Taro.navigateBack({
       url:'pages/index/login/login'
     })
+  }
+  else{
+    Taro.showToast({
+      title: "请编辑您的联系方式",
+      icon: "none",
+      duration: 1000
+    })
+  }
   }
   setconnection3(){
+    if((!isNull(this.state.tel))&&(this.state.tel!='')){
     Taro.setStorageSync('qq',this.state.qq)
+    Taro.setStorageSync('con','已选qq')
     Taro.navigateBack({
       url:'pages/index/login/login'
     })
   }
+  else{
+    Taro.showToast({
+      title: "请编辑您的联系方式",
+      icon: "none",
+      duration: 1000
+    })
+  }
+  }
+
   render () {
     const{ tel , qq , wechat }=this.state;
     return (

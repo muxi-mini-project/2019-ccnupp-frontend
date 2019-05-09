@@ -5,7 +5,7 @@ import phoone from '../../img/wechat.png'
 import photwo from '../../img/c-phone.png'
 
 import './connectiontwo.less'
-import Fetch from '../../common/request_1';
+import Fetch from '../../common/request';
 
 export default class Index extends Component {
 
@@ -18,6 +18,16 @@ export default class Index extends Component {
    */
   config = {
     navigationBarTitleText: '联系方式'
+  }
+  componentDidShow(){
+    Fetch('user/info/').then(data =>{
+      console.log(data.info)
+      this.setState({
+        tel: data.info.tel,
+        qq: data.info.qq,
+        wechat:data.info.wechat
+      })
+    })
   }
   state = {
     tel: '',
@@ -43,8 +53,6 @@ export default class Index extends Component {
     Fetch(
       'user/info/',
       {
-        username:'',
-        headPicture:'',
         tel:this.state.tel,
         qq:this.state.qq,
         wechat:this.state.wechat,

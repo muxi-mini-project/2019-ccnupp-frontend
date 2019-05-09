@@ -28,9 +28,10 @@
     font-weight: bolder;
 }
 .description{
-    padding-left:65px;
+    padding-left:40px;
     height: 170px;
     clear: both;
+    width:620px;
 }
 .title{
     display: inline-block;
@@ -38,6 +39,9 @@
     line-height: 33px;
     height: 33px;
     color:rgba(10,10,10,1);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 .cont{
     font-size:24px;
@@ -45,6 +49,9 @@
     line-height: 24px;
     height: 24px;
     margin-top:23px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 .time{
     margin-top:23px;
@@ -60,9 +67,9 @@
 }
 .button-box{
     height:50px;
-    width:285px;
-    margin-left:400px;
+    width:185px;
     margin-top:30px;
+    margin-left:530px;
     display: flex;
     justify-content: space-between;
 }
@@ -87,3 +94,13 @@
 .btn1::after {
     border: 0; 
   }
+.none{
+    width: 0;
+    height: 0;
+    float: right;
+}
+.pic{
+    width: 188px;
+    height: 111px;
+    float: right;
+}

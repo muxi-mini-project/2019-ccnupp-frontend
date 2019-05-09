@@ -2,10 +2,9 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import './index.less'
 import Fetch from "../../common/request";
-import Fetch1 from "../../common/request_2";
-import SmallTab  from '../../components/smallTab/small-tab'
+import SmallTab  from '../../components/smallTab-index/small-tab'
 import headerTab from '../../components/headerTab/header-tab'
-import NopicTab from '../../components/noPicTab/nopic-tab'
+import NopicTab from '../../components/noPicTab-index/nopic-tab'
 import CarTab from '../../components/carTab/car-tab'
 
 
@@ -27,22 +26,22 @@ export default class mypage extends Component{
 
 
   getOrderCarList(page){
-    Fetch(`/order/car/list/?page=${page}`).then(data => {
+    Fetch(`order/car/list/?page=${page}`).then(data => {
       this.setState({
-        orderList:data.orderList,
-        hasNext:data.hasNext,
-        pageNum:data.pageNum
+        orderList:data.data.orderList,
+        hasNext:data.data.hasNext,
+        pageNum:data.data.pageNum
       })
       console.log(data);
     })
   }
   getOrderBuyList(index,page){
-    Fetch(`/order/buy/list/?kind=${index}&page=${page}`).then(data => {
+    Fetch(`order/buy/list/?kind=${index}&page=${page}`).then(data => {
       console.log(data);
       this.setState({
-        orderList:data.orderList,
-        hasNext:data.hasNext,
-        pageNum:data.pageNum
+        orderList:data.data.orderList,
+        hasNext:data.data.hasNext,
+        pageNum:data.data.pageNum
       })
     })
   }
@@ -75,11 +74,11 @@ export default class mypage extends Component{
       var num = this.state.pageNum;
       num = num + 1;
       if(this.state.index !==2 ){
-      Fetch(`/order/buy/list/?kind=${this.state.index}&page=${num}`).then(data => {
-        var datalist = data.orderList;
+      Fetch(`order/buy/list/?kind=${this.state.index}&page=${num}`).then(data => {
+        var datalist = data.data.orderList;
         this.setState({
-          hasNext:data.hasNext,
-          pageNum:data.pageNum
+          hasNext:data.data.hasNext,
+          pageNum:data.data.pageNum
         })
         return datalist;
       }).then(datalist =>{
@@ -89,11 +88,11 @@ export default class mypage extends Component{
         })
       })
     }else{
-      Fetch(`/order/car/list/?page=${num}`).then(data => {
-        var datalist = data.orderList;
+      Fetch(`order/car/list/?page=${num}`).then(data => {
+        var datalist = data.data.orderList;
         this.setState({
-          hasNext:data.hasNext,
-          pageNum:data.pageNum
+          hasNext:data.data.hasNext,
+          pageNum:data.data.pageNum
         })
         return datalist;
       }).then(datalist =>{
@@ -107,49 +106,37 @@ export default class mypage extends Component{
   }
 
   componentWillMount() {
-    Fetch1(
+    Fetch(
       'user/info/',
       {
         username:Taro.getStorageSync('nickName'),
         headPicture:Taro.getStorageSync('ava_p'),
-        tel:'',
-        qq:'',
-        wechat:''
       },
-      "PUT"
+      "POST"
     )
-    Fetch(`/order/buy/list/?kind=1&page=1`).then(data => {
+    Fetch(`order/buy/list/?kind=1&page=1`).then(data => {
       this.setState({
-        orderList: data.orderList
+        orderList: data.data.orderList
       })
     })
   }
-
-  componentDidMount () {  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
   render () {
-    const inx = this.state.index;
+    const {index,orderList} = this.state;
     return (
       <View>
-        <headerTab navList={[{key:1,content:'网购'},{key:2,content:'拼车'},{key:3,content:'会员账号'},{key:4,content:'其他'},{key:5,content:'外卖'}]} onGetIndex={this.getIndex.bind(this)} />  
+        <headerTab navList={[{key:1,content:'网购'},{key:2,content:'拼车'},{key:3,content:'外卖'},{key:4,content:'会员账号'},{key:5,content:'其他'}]} onGetIndex={this.getIndex.bind(this)} />  
         <View className='height'>
         <View className='tab-content'>
-        {inx === 2?
-          this.state.orderList.map((obj,index) => (
-            <CarTab key='2' orderList={this.state.orderList[index]} />
+        {index === 2?
+          orderList.map((obj) => (
+            <CarTab key='2' orderList={obj} />
         ))
         :
-        this.state.orderList.map((obj,index) => (
+        orderList.map((obj) => (
           obj.picture?
-            <SmallTab key='2' orderList={this.state.orderList[index]} />
+            <SmallTab key='2' orderList={obj} />
             :
-            <NopicTab key='2' orderList={this.state.orderList[index]} />
+            <NopicTab key='2' orderList={obj} />
         ))
         }
         </View>

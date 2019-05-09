@@ -1,16 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text,Image,Input,Button,OpenData } from '@tarojs/components'
+import { View,Image,Input,OpenData,Button } from '@tarojs/components'
 import './detail.less'
+import Fetch1 from "../../common/request_1";
 import Fetch from "../../common/request";
 import '../../img/timeicon.png'
 import '../../img/placeicon.png' 
 import CommentUser from '../../components/comments/comments';
 
-export default class Index extends Component {
+export default class Detail extends Component {
   constructor(props){
     super(props)
     this.state = {
-      releaseFocus: false,
       orderid:0,  
       info:{
       kind:0,
@@ -18,29 +18,48 @@ export default class Index extends Component {
       timeBuy: "19：00",
       numNeed: 4,
       numExist: 2,
-      picture: "../../images/uiplus.png",
-      content: "我是内容",
-      heading: "我是标题",
+      picture: "",
+      content: "内容没有加载出来噢~",
+      heading: "请检查网络！",
       full: true,
+      username:''
       },
-      userPicture:[],
+      remark:'',
       comments:[],
-      // userheadpic:"1"
+      showButtonCheek:false,
+      showButtonEdit:true,
+      nickname:''
       }
     }
-  config = {
-    navigationBarTitleText: '首页'
-  }
-    bindReply ( ){ 
-    this.setState({ 
-    releaseFocus: true 
-    }) 
+    config = {
+      navigationBarTitleText: '订单',
+      "enablePullDownRefresh": true, 
+      onReachBottomDistance:50
     }
-    changeRemark(e){
+  previewImage(){
+    var Img = this.state.info.picture;
+    console.log(Img);
+    var Arr = [Img];
+    console.log(Arr);
+    Taro.previewImage({
+      current:Arr[0],
+      urls:Arr,
+    })
+  }
+  changeRemark(e){
+    this.setState({
+      remark:e.detail.value
+    })
+  }
+  chooseButton(){
+    const {info,nickname} = this.state;
+    var usrname = info.username;
+    if(usrname == nickname){
       this.setState({
-        remark:e.detail.value
+        showButtonCheek:true
       })
     }
+  }
   submitForm() {
     var form = this.state.remark;    
     if(form == ""){
@@ -48,111 +67,169 @@ export default class Index extends Component {
       Taro.hideLoading();  
       return;    
     }else{
-    Fetch(`/order/comments/buy/?orderID=${this.state.orderid}`,
+    Fetch(`order/comments/buy/?orderID=${this.state.orderid}`,
     {
-      userID:'1',
+      userID:Taro.getStorageSync('openid'),
       content:form,
     },
     "POST"
     ).then(
-      Fetch(`/order/buy/?orderID=${this.state.orderid}`).then(data =>{
+      Fetch(`order/buy/?orderID=${this.state.orderid}`).then(data =>{
       this.setState({
-        comments:data.comments,
-        }).then(
-          this.setState({
-            remark:""
-          })
-        )
+        comments:data.data.comments,
+        remark:''
+        })
       })
     )
   }
 }
-  // 提交评论    
-  //   Taro.request({      
-      // url: /order/comments/buy? + {orderid},      
-  //     method: "POST",
-  //     data: {
-  //       sourceId: this.state.sourceId,
-  //       comment: form.comment,
-  //       userId: this.state.globalData.haulUserInfo.id,        
-  //       userName: this.state.globalData.haulUserInfo.userName,        
-  //       userPhoto: app.globalData.haulUserInfo.userPhoto
-  //     },      
-  //     header: {        
-  //       "content-type": "application/x-www-form-urlencoded;charset=utf-8",        
-  //       //token: app.globalData.token       
-  //     },      
-  //     success: res => {        
-  //       console.log(res)        
-  //       if (res.data.success) {          
-  //         Taro.showToast({            
-  //           title: "回复成功"          
-  //         })          
-  //         that.refresh();
-  //         mydata.commentId = "";
-  //         mydata.replyUserName = "";
-  //         this.setState({            
-  //           replyUserName: mydata.replyUserName,
-  //           reply: false
-  //         })        
-  //       } else {          
-  //         Taro.showToast({            
-  //           title: '回复失败，请检查您的网络',          
-  //         })        
-  //       }      
-  //     }    
+toPostOrder(){
+  Fetch1(
+    `order/buy/?orderID=${this.state.orderid}`,
+    {
+      userID:Taro.getStorageSync('openid')
+    },
+    "POST"
+   ).then(data =>{
+     var num = 0;
+     var tel1 = data.way.tel;
+     var qq1 = data.way.qq;
+     var wechat1 = data.way.wecaht;
+     if(qq1!=''){
+       num = 0;
+     }else if(wechat1!=''){
+       num = 1;
+     }else if(tel1!=''){
+       num = 2;
+     }
+     console.log(tel1,qq1,wechat1);
+    Taro.showModal({
+      title: "参与成功",
+      content:`联系方式：\n
+      qq：${qq1}\n
+      电话：${tel1}\n
+      微信：${wechat1}\n
+      按确定复制联系方式噢~
+      `,
+      success:(res)=> {
+        if (res.confirm) {
+          if(num == 0){
+          Taro.setClipboardData({
+            data:`电话：${tel1}`,
+          })
+        }else if(num == 1){
+          Taro.setClipboardData({
+            data:`qq：${qq1}`,
+          })
+        }else if(num == 2){
+          Taro.setClipboardData({
+            data:`微信：${wechat1}`,
+          })
+        }
+      }
+    }
+    }).then()
+  })
+}
+    //刷新
+    onPullDownRefresh(){
+      const {orderid} = this.state
+      Taro.showNavigationBarLoading();
+      Fetch(`order/buy/?orderID=${orderid}`).then(data =>{
+        this.setState({
+          info:data.data.info,
+          comments:data.comments,
+          })
+      });
+      Taro.hideNavigationBarLoading();
+      Taro.stopPullDownRefresh();
+  }
+
+
+  // componentWillMount () {
+  //   var id = this.$router.params.id     
+  //   this.setState({
+  //     orderid:id,
   //   })
+  //   console.log(id)
+  //   Fetch(`order/buy/?orderID=${id}`
+  //   ).then(data =>{
+  //     this.setState({
+  //     info:data.data.info,
+  //     comments:data.data.comments,
+  //     })
+  //   })
+  // }
 
-
-  componentWillMount () {
+  componentDidMount () {
     var id = this.$router.params.id     
     this.setState({
       orderid:id,
     })
-    Fetch(`/order/buy/?orderID=${id}`
+    Fetch(`order/buy/?orderID=${id}`
     ).then(data =>{
-      console.log(data);
+      var infoname = data.data.info.username;
+      console.log(infoname);
       this.setState({
-      info:data.info,
-      userPicture:data.userPicture,
-      comments:data.comments,
+      info:data.data.info,
+      comments:data.data.comments,
       })
-    });
-  }
+      var usrname = infoname;
+      var that = this;
+        Taro.getUserInfo({
+          success(res) {
+            var userInfo = res.userInfo;
+            var nickName = userInfo.nickName;
+            console.log(nickName,usrname);
+            if(usrname === nickName){
+              that.setState({
+                nickname:nickName,
+                showButtonCheek:true
+              })
+            }else{
+              that.setState({
+                showButtonEdit:true
+              })
+            }
+          }
+        })
+      })
+    }
 
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
+  componentDidShow () {
+   }
 
   componentDidHide () { }
 
   render () {
-    const {remark} = this.state;
+    const {remark,info,comments,showButtonEdit} = this.state;
     return (
       <View className='body'>
       <View className='content'>
       <View className='usrmasg'>
-        <Image class='headsculpture' src={this.state.info.user_picture}> </Image>
-        <View className='nickname'>{this.state.info.username}</View>
+        <Image class='headsculpture' src={info.user_picture}> </Image>
+        <View className='nickname'>{info.username}</View>
         </View>
-        <View className='header'>{this.state.info.heading}</View>
-        <View className='cnt'>{this.state.info.content}</View>
+        <View className='header'>{info.heading}</View>
+        <View className='cnt'>{info.content}</View>
         <View className='time'>
           <Image className='timeimg' src='../../img/timeicon.png' ></Image>
-          <View className='timetxt'>下单时间：{this.state.info.timeBuy}</View>
+          <View className='timetxt'>下单时间：{info.timeBuy}</View>
         </View>
         <View className='place'>
           <Image className='placeimg' src='../../img/placeicon.png'></Image>
-          <View className='placetxt'>拼单地点：{this.state.info.location}</View>
+          <View className='placetxt'>拼单地点：{info.location}</View>
         </View>
-        <View className='num'>已拼{this.state.info.numExist}/{this.state.info.numNeed}</View>
+        <View className='num'>已拼{info.numExist}/{info.numNeed}</View>
+        {info.picture?
         <View className='img-box'>
-        <Image className='content-imge' src={this.state.info.picture}></Image>
+        <Image className='content-imge' src={info.picture} mode='aspectFit' onClick={this.previewImage}></Image>
         </View>
+        :
+        <View></View>
+        }
         </View>
-        <View className='remarknum'>{this.state.comments.length}条评论回复</View>
+        <View className='remarknum'>{comments.length}条评论回复</View>
         <View className='comments'>
         <View className='talk'>
         <View className='headsculpture'>
@@ -162,7 +239,6 @@ export default class Index extends Component {
           type='text'
           placeholderClass='input_null'
           placeholder='问问更多细节吧~'
-          focus
           maxLength='-1' 
           showConfirmBar={false} 
           cursorSpacing={0}
@@ -174,10 +250,13 @@ export default class Index extends Component {
         <View className='submit' onClick={this.submitForm.bind(this)}>发送</View> 
         </View> 
       </View> 
-      {this.state.comments.map((obj,index) => (
-      <CommentUser  remark={this.state.comments[index]} />
+      {comments.map((obj) => (
+      <CommentUser remark={obj} key='2' />
       ))}
       </View>
+      <View className='blank'>  </View>
+      <Button className={showButtonEdit?'footer':'none'} onClick={this.toPostOrder}>我要拼单</Button>
+      {/* <Button className={showButtonCheek?'footer_blue':'none'} onClick={this.toPostOrder}>编辑</Button> */}
     </View>
     )
     }

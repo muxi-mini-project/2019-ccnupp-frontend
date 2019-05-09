@@ -2,6 +2,7 @@ import Taro, { Component} from '@tarojs/taro'
 import { View,  OpenData} from '@tarojs/components'
 // import { AtButton ,Open-data} from 'taro-ui'
 import './person.less'
+import Fetch from "../../common/request";
 import Connection from '../../components/connection/connection';
 import Myrecord from '../../components/myrecord/myrecord';
 import Toadvice from '../../components/toadvice/toadvice';
@@ -20,7 +21,21 @@ export default class Person extends Component {
     navigationBarTitleText: '我的'
   }
 
-  componentWillMount () { }
+  onShareAppMessage(){
+    return{
+      imageUrl:'../../img/sharepp.png',
+    }
+  }
+  componentWillMount () {
+    Fetch(
+      'user/info/',
+      {
+        username:Taro.getStorageSync('nickName'),
+        headPicture:Taro.getStorageSync('ava_p'),
+      },
+      "POST"
+    )
+   }
 
   componentDidMount () { }
 

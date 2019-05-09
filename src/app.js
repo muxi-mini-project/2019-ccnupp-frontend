@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index'
 import  './img/uiindex.png'
@@ -15,14 +16,16 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/person/person',
+      'pages/choose-order/choose',
       'pages/publish/publish',
       'pages/mine/home',
       'pages/add/detail',
       'pages/jinconnect/jinconnect',
       'pages/advice/advice',
       'pages/index/login/login',
-      // 'pages/addcar/addcar'
+      'pages/addcar/addcar',
       'pages/connectiontwo/connectiontwo',
+      'pages/publish_two/publish_two'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -37,7 +40,7 @@ class App extends Component {
         iconPath: "./img/uiindex.png",
         selectedIconPath: "./img/uiindex-red.png"
       }, {
-        pagePath: "pages/publish/publish",
+        pagePath: "pages/choose-order/choose",
         text: "发起",
         iconPath: "./img/uiplus.png",
         selectedIconPath: "./img/uiplus-red.png"
@@ -83,15 +86,6 @@ class App extends Component {
     }
   })
   }
-
-  componentDidShow () {}
-
-  componentDidHide () {}
-
-  componentDidCatchError () {}
-
-  // 在 App 类中的 render() 函数没有实际作用
-  // 请勿修改此函数
   render () {
     return (
       <Index />

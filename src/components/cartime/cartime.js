@@ -1,15 +1,14 @@
-/* eslint-disable react/no-unescaped-entities */
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Picker ,Image} from '@tarojs/components'
 import pho from '../../img/watch.png'
-import './time.less'
+import './cartime.less'
 
-export default class Time extends Component {
+export default class Cartime extends Component {
   componentWillMount(){
     this.props.onTime(this.state.timeSel)
   }
   state = {
-    timeSel: '2018-05-05',
+    timeSel: '选择出发时间',
   }
 
   onTimeChange = e => {
@@ -24,9 +23,8 @@ export default class Time extends Component {
     <View className='page-section'>
        <Image className='pho' src={pho} />
             <View>
-              <Picker className='pck' mode='date' onChange={this.onTimeChange}>
-              <Text className='address'>截止时间</Text>
-                <Text className='arry'>{this.state.timeSel} ></Text>
+              <Picker className='pck' mode='date' onChange={this.onTimeChange} >
+                <Text className='arry'>{this.state.timeSel}</Text>
               </Picker> 
         </View>
       </View>

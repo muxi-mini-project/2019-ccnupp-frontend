@@ -1,7 +1,7 @@
 .box{
     margin:20px auto;
     width:710px;
-    height:380px;
+    height:320px;
     background:rgba(255,255,255,1);
     border-radius:30px;
 }
@@ -27,22 +27,11 @@
     font-size:30px;
     font-weight: bolder;
 }
-.cnt_box{
-    display: flex;
-    height:170px;
-}
 .description{
-    padding-left:20px;
-    margin-top:30px;
-    height:170px;
-    margin-left: 15px;
-}
-.description-picture{
-    margin-top:30px;
-    width:153px;
-    height:153px;
-    margin-left: 20px;
-    display: inline-block;
+    padding-left:40px;
+    height: 170px;
+    clear: both;
+    width: 640px;
 }
 .title{
     display: inline-block;
@@ -50,6 +39,19 @@
     line-height: 33px;
     height: 33px;
     color:rgba(10,10,10,1);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.cont{
+    font-size:24px;
+    color:rgba(51,51,51,1);
+    line-height: 24px;
+    height: 24px;
+    margin-top:23px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 .time{
     margin-top:23px;
@@ -63,34 +65,6 @@
     line-height: 24px;
     color:rgba(153,153,153,1);
 }
-.button-box{
-    height:50px;
-    width:185px;
-    margin-left:530px;
-    display: flex;
-    justify-content: space-between;
-}
-.btn{
-    background-color: white;
-    color:red;
-    font-size: 30px;
-    line-height: 47px;
-    border-radius:20px;
-    border: 1px solid rgb(187, 186, 186);
-    padding-left:21px;  
-    padding-right:21px;
-}
-.red{
-    color:red;
-    border: 1px solid red;
-}
-.black{
-    color:black;
-    border:1px solid black;
-}
-.btn1::after {
-    border: 0; 
-  }
 .none{
     width: 0;
     height: 0;
@@ -99,5 +73,5 @@
 .pic{
     width: 188px;
     height: 111px;
-    margin-left: 40px;
+    float: right;
 }

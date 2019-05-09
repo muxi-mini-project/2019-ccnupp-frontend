@@ -5,7 +5,7 @@ import './address.less'
 
 export default class Address extends Component {
   state = {
-    selector: ['图书馆', '八号楼', '东一食堂', '南湖食堂','学子食堂','北门','佑铭体育馆'],
+    selector: ['图书馆', '北门','南门','七号楼','八号楼','九号楼','东区宿舍','西区宿舍','元宝山','国交','学子餐厅','桂香园食堂', '博雅园食堂','东一食堂', '南湖食堂','学子食堂','南湖宿舍2栋','南湖宿舍5栋','南湖宿舍13栋'],
     selectorChecked: '图书馆',
   }
 

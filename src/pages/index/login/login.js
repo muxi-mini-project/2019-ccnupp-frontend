@@ -3,6 +3,7 @@ import { View,  Input, Button ,Image,Text} from "@tarojs/components";
 
 
 import logo from "../../../img/logo.png";
+import shouquan from "../../../img/shouquan.png";
 import "./login.less";
 
 export default class Index extends Component {
@@ -185,7 +186,7 @@ export default class Index extends Component {
             </View>
             <View className={this.state.mask_bg}></View>
             <View className={this.state.mask_name}>
-              <Image></Image>
+              <Image className='shouquan' src={shouquan}></Image>
               <Button
                 open-type='getUserInfo' 
                 lang='zh_CN' 

@@ -7,23 +7,20 @@ export default class CommentUser extends Component {
 
   constructor(props){
     super(props)
-    this.state = {
-      }
     }
 
-
-  render () { 
-    var list=this.props.remark
+  render () {
+    const {remark}=this.props
     return (
       <View className='return'>
         <View className='remark_box'>
-        <Image src={list.headPicture} className='headsculpture'></Image>
+        <Image src={remark.headPicture} className='headsculpture'></Image>
       <Text className='head-name'>
-      {list.username}
+      {remark.username}
       </Text>
       </View>
       <View className='remark'>
-        {list.content}
+        {remark.content}
       </View>
     </View>
     )

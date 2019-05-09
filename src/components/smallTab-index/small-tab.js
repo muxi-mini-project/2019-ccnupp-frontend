@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text,Image } from '@tarojs/components'
-import './nopic-tab.less'
+import { View,Image } from '@tarojs/components'
+import './small-tab.less'
 import '../../img/full.png'
 
-export default class NopicTab extends Component {
+export default class SmallTab extends Component {
 
   constructor(props){
     super(props)
@@ -22,13 +22,6 @@ export default class NopicTab extends Component {
       url: '../add/detail?id=' + `${id}`
   })
 }
-toPage(e){
-  var id = e.currentTarget.dataset.id
-  Taro.navigateTo({
-    url: '../publish_two/publish_two?id=' + `${id}`
-})
-}
-
 componentWillMount () {
   const {orderList}=this.props
   if(orderList.numExist == orderList.numNeed){
@@ -54,24 +47,24 @@ componentWillMount () {
       <View className='header'>
       {orderList.userPicture.map((value) => (
       <Image className='headSculpture'
-        src={value} key='2'
+        src={value}
+        key='2'
       ></Image>
         ))}
 
-<View className='numberOfpinpin' >已拼{orderList.numExist}/{orderList.numNeed} 
+      <View className='numberOfpinpin' >已拼{orderList.numExist}/{orderList.numNeed} 
       </View>
       </View>
+      <View className='cnt_box'>
+      <Image className='description-picture'
+        src={orderList.picture}
+      ></Image>
         <View className='description'>
-        <Image className={full?'pic':'none'} src='../../img/full.png'></Image>
         <View className='title'>{orderList.heading}</View>
-        <View className='cont'>{orderList.content}</View>
         <View className='time'>下单时间：{orderList.timeBuy}</View>
         <View className='place'>地点：{orderList.location}</View>
         </View>
-        <View className='button-box'>
-        <View className='btn black' onClick={this.toPage.bind(this)} data-id={orderList.orderbuyID}>
-        <Text>再拼一单</Text>
-        </View>
+        <Image className={full?'pic':'none'} src='../../img/full.png'></Image>
         </View>
       </View>
     )

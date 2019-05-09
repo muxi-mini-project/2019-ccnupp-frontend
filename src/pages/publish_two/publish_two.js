@@ -1,7 +1,6 @@
-/* eslint-disable no-shadow */
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text , Input,Textarea,Button,Image} from '@tarojs/components'
-import './publish.less' 
+import { View, Text  , Input,Textarea,Button,Image} from '@tarojs/components'
+import '../publish/publish.less' 
 import pho from '../../img/pho.png'
 import '../../components/classify/classify.less'
 import Classify from '../../components/classify/classify';
@@ -9,9 +8,9 @@ import Address from '../../components/address/address';
 import Time from '../../components/time/time';
 import People from '../../components/people/people';
 import Connection from '../../components/connection/connection';
-import Fetch from '../../common/request';
+import Fetch from '../../common/request_1';
 
-export default class Publish extends Component {
+export default class Index extends Component {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -24,20 +23,21 @@ export default class Publish extends Component {
     Taro.removeStorageSync('qq'),
     Taro.removeStorageSync('tel'),
     Taro.removeStorageSync('wechat')
-    Taro.removeStorageSync('con')
-  }
-  componentDidShow(){
-    this.setState({
-      con:Taro.getStorageSync('con')
-    })
+    var id = this.$router.params.id  
+    Fetch(`order/buy/?orderID=${id}`
+    ).then(data =>{
+      this.setState({
+        url:data.data.info.picture,
+        heading:data.data.info.heading,
+        content:data.data.info.content,
+      })
+    });
   }
    config = {
     navigationBarTitleText: '发布拼单'
   }
   
-  constructor(props){
-    super(props)
-    this.state = {
+    state={
       kind:'',
       url:'',
       heading:'',
@@ -45,8 +45,7 @@ export default class Publish extends Component {
       location:'',
       numNeed:'',
       timeBuy:'',
-      }
-    }
+    };
   changeheading(e) {
     this.setState({
       heading: e.detail.value
@@ -86,8 +85,9 @@ export default class Publish extends Component {
           token:Taro.getStorageSync('token')
         },
         success:function(res){
-          console.log(res)
+          // console.log(res)
           var ob=JSON.parse(res.data)
+          console.log(ob)
           Taro.setStorageSync('image',ob.image_url)
         }
       })
@@ -116,43 +116,32 @@ export default class Publish extends Component {
     if(e=='其他') this.setState({kind:4});
   }
   toPostOrder(){
-    
-    if((this.state.heading!='')&&(this.state.con!='') ){
-      Fetch(
-        'order/post/buy/',
-        {
-          kind:this.state.kind,
-          heading:this.state.heading,
-          content:this.state.content,
-          timeBuy:this.state.timeBuy,
-          location: this.state.location,
-          numNeed: this.state.numNeed,
-          picture:Taro.getStorageSync('image'),
-          tel:Taro.getStorageSync('tel'),
-          qq:Taro.getStorageSync('qq'),
-          wechat:Taro.getStorageSync('wechat'),
-        },
-        "POST"
-       ).then(
-        Taro.showToast({
-          title: "发布成功",
-          icon: "success",
-          duration: 1000
-        }),
-        Taro.navigateBack({
-          url:'pages/index/index'
-        })
-      )
-    }
-    else {
+    Fetch(
+      'order/post/buy/',
+      {
+        kind:this.state.kind,
+        heading:this.state.heading,
+        content:this.state.content,
+        timeBuy:this.state.timeBuy,
+        location: this.state.location,
+        numNeed: this.state.numNeed,
+        picture:Taro.getStorageSync('image'),
+        tel:Taro.getStorageSync('tel'),
+        qq:Taro.getStorageSync('qq'),
+        wechat:Taro.getStorageSync('wechat'),
+      },
+      "POST"
+     ).then(
       Taro.showToast({
-        title: "请检查标题或联系方式哦",
-        icon: "none",
-        duration: 1300
+        title: "发布成功",
+        icon: "success",
+        duration: 1000
+      }),
+      Taro.navigateBack({
+        url:'pages/index/index'
       })
-    }
-    }
-  
+    )
+  }
   render () {
     const { heading , content}=this.state;
     return (
@@ -162,7 +151,6 @@ export default class Publish extends Component {
         <Input 
           className='input' 
           type='text' 
-          maxLength='10'
           placeholder='写清商品名称有助于找到更多拼友'
           value={heading}
           onInput={this.changeheading}
@@ -181,11 +169,11 @@ export default class Publish extends Component {
         ></Textarea>
         </View>
         <View className='addbox'>
+        <Image src={this.state.url} className='pho-two'></Image>
         <Button className='addpho' onClick={this.chooseImage}>
         <Image src={pho} className='pho-one'></Image>
         <Text className='text-one'>添加照片</Text>
         </Button>
-        <Image src={this.state.url} className='pho-two'></Image>
         </View>
       </View>
       <View className='choose-box'>
@@ -193,8 +181,6 @@ export default class Publish extends Component {
         <Address onAdress={this.adress.bind(this)} />
         <Time onTime={this.time.bind(this)} />
         <People onPeople={this.numpeople.bind(this)} />
-        <Text className='connect'>{this.state.con}
-        </Text>
         <Connection />
       </View>
       <Button className='footer' onClick={this.toPostOrder} >确认发布</Button>
