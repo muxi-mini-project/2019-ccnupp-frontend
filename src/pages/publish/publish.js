@@ -25,6 +25,7 @@ export default class Publish extends Component {
     Taro.removeStorageSync('tel'),
     Taro.removeStorageSync('wechat')
     Taro.removeStorageSync('con')
+    Taro.removeStorageSync('image')
   }
   componentDidShow(){
     this.setState({

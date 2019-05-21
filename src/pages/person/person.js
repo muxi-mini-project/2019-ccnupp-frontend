@@ -23,6 +23,7 @@ export default class Person extends Component {
 
   onShareAppMessage(){
     return{
+      title:'校园拼拼',
       imageUrl:'../../img/sharepp.png',
     }
   }
